@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>K8s Microservices App</title>
+<style>
+body { font-family: Arial; background:#0d1117; color:#c9d1d9; padding:40px; text-align:center; }
+button { padding:12px 24px; margin:10px; background:#238636; color:white; border:none; }
+.card { background:#161b22; padding:25px; border-radius:10px; max-width:600px; margin:auto; }
+</style>
+</head>
+<body>
+
+<h1>Kubernetes Microservices App</h1>
+
+<div class="card">
+<button onclick="recordVisit()">Record Visit</button>
+<button onclick="loadStats()">Refresh Stats</button>
+<div id="stats">Click refresh to load stats.</div>
+</div>
+
+<script>
+const API="/api";
+
+async function recordVisit(){
+ await fetch(API+"/visit",{method:"POST"});
+ loadStats();
+}
+
+async function loadStats(){
+ const res=await fetch(API+"/stats");
+ const data=await res.json();
+ document.getElementById("stats").innerHTML=
+ "<p>Total Visits: "+data.total_visits+"</p>"+
+ "<p>Recent:<br>"+data.recent_visits.join("<br>")+"</p>";
+}
+
+loadStats();
+</script>
+
+</body>
+</html>
